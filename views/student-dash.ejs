@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>学生工作台 - 校园智慧食堂</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="header">
+        <div>
+            <strong>智慧食堂</strong> | 欢迎您，<%= user %>
+        </div>
+        <div>
+            <span>账户余额: <strong style="color: #ffd166;">¥<%= balance.toFixed(2) %></strong></span>
+            <nav style="display: inline;">
+                <a href="/logout">退出登录</a>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>🍚 今日供应菜品</h2>
+        <div class="grid">
+            <% dishes.forEach(dish => { %>
+                <div class="dish-card">
+                    <h3><%= dish.name %></h3>
+                    <p><%= dish.description %></p>
+                    <div style="display:flex; justify-content: space-between; align-items: center;">
+                        <span class="price">¥<%= dish.price %></span>
+                        <span class="stock">库存: <%= dish.stock %></span>
+                    </div>
+                    <form action="/order/<%= dish.id %>" method="POST">
+                        <button type="submit" style="width:100%">立即下单</button>
+                    </form>
+                </div>
+            <% }) %>
+        </div>
+
+        <h2 style="margin-top: 50px;">📋 我的订单历史</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>订单日期</th>
+                    <th>菜品名称</th>
+                    <th>状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% orders.forEach(order => { %>
+                    <tr>
+                        <td><%= new Date(order.created_at).toLocaleString() %></td>
+                        <td><%= order.dish_name %></td>
+                        <td><span style="background: #e9ecef; padding: 5px 10px; border-radius: 15px;"><%= order.status %></span></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

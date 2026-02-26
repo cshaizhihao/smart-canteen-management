@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>管理后台 - 校园智慧食堂</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="header" style="background-color: #2b2d42;">
+        <div>
+            <strong>智慧食堂管理后台</strong> | 当前管理员: <%= user %>
+        </div>
+        <nav>
+            <a href="/logout">安全退出</a>
+        </nav>
+    </div>
+
+    <div class="container">
+        <h2>🛠️ 菜品与库存管理</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>名称</th>
+                    <th>价格</th>
+                    <th>库存</th>
+                    <th>分类</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% dishes.forEach(dish => { %>
+                    <tr>
+                        <td><%= dish.name %></td>
+                        <td>¥<%= dish.price %></td>
+                        <td><%= dish.stock %></td>
+                        <td><%= dish.category %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+
+        <h2 style="margin-top: 50px;">🔔 实时订餐请求</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>记录ID</th>
+                    <th>学生用户</th>
+                    <th>订购菜品</th>
+                    <th>当前状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% orders.forEach(order => { %>
+                    <tr>
+                        <td>#<%= order.id %></td>
+                        <td><strong><%= order.username %></strong></td>
+                        <td><%= order.dish_name %></td>
+                        <td><%= order.status %></td>
+                        <td>
+                            <form action="/admin/update-status/<%= order.id %>" method="POST" style="display:inline;">
+                                <select name="status" onchange="this.form.submit()">
+                                    <option value="已下单" <%= order.status == '已下单' ? 'selected' : '' %>>已下单</option>
+                                    <option value="制作中" <%= order.status == '制作中' ? 'selected' : '' %>>制作中</option>
+                                    <option value="待取餐" <%= order.status == '待取餐' ? 'selected' : '' %>>待取餐</option>
+                                    <option value="已完成" <%= order.status == '已完成' ? 'selected' : '' %>>已完成</option>
+                                </select>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
